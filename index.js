@@ -4,7 +4,9 @@ const PORT = process.env.PORT || 3005
 const morgan = require("morgan")
 const helmet = require("helmet")
 const cors = require("cors")
-require("./db/pg")
+
+require("dotenv").config()
+// require("./db/pg")
 
 app.use(helmet())
 app.use(cors())
