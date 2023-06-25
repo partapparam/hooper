@@ -16,11 +16,11 @@ const usersSchema = new Schema(
       },
       last: { type: String, required: true, message: "last name is required" },
     },
-    passwordHash: {
-      type: String,
-      required: true,
-      message: "password is required",
-    },
+    // passwordHash: {
+    //   type: String,
+    //   required: true,
+    //   message: "password is required",
+    // },
     profilePhoto: String,
     phone: {
       type: String,
@@ -35,7 +35,7 @@ const usersSchema = new Schema(
         returnedObject.id = returnedObject._id.toString()
         delete returnedObject._id
         delete returnedObject.__v
-        delete returnedObject.passwordHash
+        // delete returnedObject.passwordHash
       },
     },
   }
