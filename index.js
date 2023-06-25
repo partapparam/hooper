@@ -6,7 +6,8 @@ const helmet = require("helmet")
 const cors = require("cors")
 
 require("dotenv").config()
-// require("./db/pg")
+// require("./postgres/pg")
+require("./mongo/db")
 
 app.use(helmet())
 app.use(cors())

@@ -1,10 +1,11 @@
 const mongoose = require("mongoose")
+const { Schema, model } = mongoose
 
 /**
  * toJSON Transform function will allow us to edit the JSON object that is sent back, removing fields and changing the _id to id
  */
 
-const usersSchema = new mongoose.Schema(
+const usersSchema = new Schema(
   {
     username: { type: String, required: true, message: "Username is required" },
     name: {
@@ -15,14 +16,17 @@ const usersSchema = new mongoose.Schema(
       },
       last: { type: String, required: true, message: "last name is required" },
     },
-    email: { type: String, required: true, message: "Email is required" },
     passwordHash: {
       type: String,
       required: true,
       message: "password is required",
     },
     profilePhoto: String,
-    phone: String,
+    phone: {
+      type: String,
+      required: true,
+      message: "Phone number is required",
+    },
   },
   {
     timestamps: true,
@@ -37,14 +41,14 @@ const usersSchema = new mongoose.Schema(
   }
 )
 /**
- * Validates unique email
+ * Validates unique phone number
  */
-usersSchema.path("email").validate(async (email) => {
-  const emailCount = await User.countDocuments({
-    email: email,
+usersSchema.path("phone").validate(async (phone) => {
+  const phoneCount = await User.countDocuments({
+    phone: phone,
   })
-  return !emailCount
-}, "Email already exists")
+  return !phoneCount
+}, "Phone number already exists. Please log in. ")
 
 /**Username already exists */
 usersSchema.path("username").validate(async (username) => {
@@ -54,6 +58,6 @@ usersSchema.path("username").validate(async (username) => {
   return !usernameCount
 }, "Username already exists")
 
-const User = mongoose.model("User", usersSchema)
+const User = model("User", usersSchema)
 
 module.exports = User

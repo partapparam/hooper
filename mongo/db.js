@@ -13,7 +13,7 @@ db.on("error", (err) => {
 })
 
 db.once("open", () => {
-  console.log("mongo db is opne")
+  console.log("mongo db is open")
 })
 
 module.exports = db
