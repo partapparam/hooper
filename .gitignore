@@ -27,4 +27,4 @@ yarn-error.log*
 *.pub
 
 #ignore .json files
-.json
+firebase/*.json
