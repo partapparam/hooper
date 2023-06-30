@@ -8,6 +8,7 @@ const cors = require("cors")
 require("dotenv").config()
 // require("./postgres/pg")
 require("./mongo/db")
+require("./firebase/firebase")
 
 app.use(helmet())
 app.use(cors())
