@@ -1,6 +1,7 @@
 const express = require("express")
 const app = express()
 const PORT = process.env.PORT || 3005
+const http = require("http")
 const morgan = require("morgan")
 const helmet = require("helmet")
 const cors = require("cors")
@@ -13,6 +14,8 @@ const {
 const { makeExecutableSchema } = require("@graphql-tools/schema")
 const { WebSocketServer } = require("ws")
 const { useServer } = require("graphql-ws/lib/use/ws")
+const typeDefs = require("./graphql/schema")
+const resolvers = require("./graphql/resolvers")
 
 require("dotenv").config()
 // require("./postgres/pg")
@@ -25,10 +28,68 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(morgan("dev"))
 
-app.get("/", (req, res) => {
-  return res.json({ message: "success", data: "You are getting data" })
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
 })
 
-app.listen(PORT, () => {
-  console.log(`Server is running ${PORT}`)
-})
+/**
+ * For Subscriptions to be setup correctly, we setup the WebSocket Server with a function
+ * When Queries and Mutations are made, it will use the HTTP server.
+ */
+
+const start = async () => {
+  const app = express()
+  const httpServer = http.createServer(app)
+
+  const wsServer = new WebSocketServer({
+    server: httpServer,
+    path: "/",
+  })
+
+  const schema = makeExecutableSchema({ typeDefs, resolvers })
+  // WSServer Object is registered to listen to WS connections, besides the usual HTTP connections
+  const serverCleanup = useServer({ schema }, wsServer)
+
+  const server = new ApolloServer({
+    schema,
+    // this plugin is recommended to ensure the server shuts down correctly
+    // Function will close WS connection on server shutdown
+    plugins: [
+      ApolloServerPluginDrainHttpServer({ httpServer }),
+      {
+        async serverWillStart() {
+          return {
+            async drainServer() {
+              await serverCleanup.dispose()
+            },
+          }
+        },
+      },
+    ],
+  })
+  // The Graphql server has to start first, so we use Await
+  await server.start()
+
+  app.use(
+    "/",
+    cors(),
+    express.json(),
+    expressMiddleware(server, {
+      context: async ({ req }) => {
+        // Set context by getting Firebase User ID. Use Firebase Admin SDK
+        const auth = req ? req.query.firebase : null
+
+        // const currentUser = await User.findById(auth)
+        // return { currentUser }
+      },
+    })
+  )
+
+  const PORT = 4000
+
+  httpServer.listen(PORT, () => {
+    console.log("Server is now running at http://localhost:4000")
+  })
+}
+start()

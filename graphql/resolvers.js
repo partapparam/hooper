@@ -26,5 +26,10 @@ const resolvers = {
       }
       return user
     },
+    updatePlayer: async (root, args) => {
+      console.log("updatePlayer")
+    },
   },
 }
+
+module.exports = resolvers
