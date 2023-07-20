@@ -1,22 +1,24 @@
 const typeDefs = `#graphql
+# A Schema is not responsible for defining where the data comes from or hows it stored. It defines a collection of types and the relationships between those types
 
 # Define the queryable fields
     type Name {
+        #Cant return null if "!"
         firstName: String!
         lastName: String!
     }
 
     type Score {
-        home: Int!
-        away: Int!
+        home: Int
+        away: Int
     }
 
     type Player {
-        name: Name!
-        phone: String!
-        location: String!
-        photoURL: String!
-        username: String!
+        name: Name
+        phone: String
+        location: String
+        photoURL: String
+        username: String
         firebaseAuth: String!
     }
 
@@ -24,11 +26,11 @@ const typeDefs = `#graphql
         playerCount: Int!
         winningTeam: Int
         score: Score!
-        homeTeam: [Player!]
-        awayTeam: [Player!]
+        homeTeam: [Player!]! # this list can't be null and the list items can't be null
+        awayTeam: [Player!] #the list items can't be null
     }
 
-    # defines the all of the available queries that clients can execute, along with the return types for each
+    # defines all of the available queries that clients can execute, along with the return types for each
     type Query {
         playerAuth(firebaseAuth: String): Player
         findPlayer(name: String): Player
