@@ -2,6 +2,10 @@ const typeDefs = `#graphql
 # A Schema is not responsible for defining where the data comes from or hows it stored. It defines a collection of types and the relationships between those types
 
 # Define the queryable fields
+"Descriptions for the type"
+"""
+multiline Descriptions
+"""
     type Name {
         #Cant return null if "!"
         firstName: String!
@@ -32,12 +36,25 @@ const typeDefs = `#graphql
 
     # defines all of the available queries that clients can execute, along with the return types for each
     type Query {
-        playerAuth(firebaseAuth: String): Player
-        findPlayer(name: String): Player
+        PlayerAuth(firebaseAuth: String): Player
+        FindPlayer(name: String): Player
+    }
+
+    interface MutationResponse {
+        code: String!
+        success: Boolean!
+        message: String!
+    }
+
+    type CreatePlayerMutationResponse implements MutationResponse {
+        code: String!
+        success: Boolean!
+        message: String!
+        player: Player!
     }
 
     type Mutation {
-        updatePlayer(
+        UpdatePlayer(
             username: String!
             firstName: String!
             lastName: String!
@@ -45,11 +62,11 @@ const typeDefs = `#graphql
             firebaseAuth: String!
         ): Player
 
-        createPlayer(
+        CreatePlayer(
             firebaseAuth: String!
-        ): Player
+        ): CreatePlayerMutationResponse
 
-        updatePlayerPhoto(
+        UpdatePlayerPhoto(
             photoURL: String!
         ): Player
 
