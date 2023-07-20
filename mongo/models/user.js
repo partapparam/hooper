@@ -7,14 +7,12 @@ const { Schema, model } = mongoose
 
 const usersSchema = new Schema(
   {
-    username: { type: String, required: true, message: "Username is required" },
+    username: { type: String },
     name: {
       first: {
         type: String,
-        required: true,
-        message: "first name is required",
       },
-      last: { type: String, required: true, message: "last name is required" },
+      last: { type: String },
     },
     // passwordHash: {
     //   type: String,
@@ -22,11 +20,11 @@ const usersSchema = new Schema(
     //   message: "password is required",
     // },
     profilePhoto: String,
-    phone: {
+    location: {
       type: String,
-      required: true,
-      message: "Phone number is required",
     },
+    phone: String,
+    firebaseAuth: String,
   },
   {
     timestamps: true,

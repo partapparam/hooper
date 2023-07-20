@@ -3,13 +3,11 @@ const typeDefs = `#graphql
 
 # Define the queryable fields
 "Descriptions for the type"
-"""
-multiline Descriptions
-"""
+
     type Name {
         #Cant return null if "!"
-        firstName: String!
-        lastName: String!
+        firstName: String
+        lastName: String
     }
 
     type Score {
@@ -74,7 +72,7 @@ multiline Descriptions
             lastName: String!
             location: String!
             firebaseAuth: String!
-        ): Player
+        ): UpdatePlayerMutationResponse
 
         CreatePlayer(
             firebaseAuth: String!
