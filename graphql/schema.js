@@ -53,6 +53,20 @@ multiline Descriptions
         player: Player!
     }
 
+    type UpdatePlayerMutationResponse implements MutationResponse {
+        code: String!
+        success: Boolean!
+        message: String!
+        player: Player!
+    }
+
+    type UpdatePlayerPhotoResponse implements MutationResponse {
+        code: String!
+        success: Boolean!
+        message: String!
+        player: Player!
+    }
+
     type Mutation {
         UpdatePlayer(
             username: String!
