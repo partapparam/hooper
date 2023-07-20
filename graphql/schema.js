@@ -1,12 +1,14 @@
-const typeDefs = `
+const typeDefs = `#graphql
+
+# Define the queryable fields
     type Name {
         firstName: String!
         lastName: String!
     }
 
     type Score {
-        home: Number!
-        away: Number!
+        home: Int!
+        away: Int!
     }
 
     type Player {
@@ -19,16 +21,17 @@ const typeDefs = `
     }
 
     type Game {
-        playerCount: Number!
-        winningTeam: Number
+        playerCount: Int!
+        winningTeam: Int
         score: Score!
         homeTeam: [Player!]
         awayTeam: [Player!]
     }
 
+    # defines the all of the available queries that clients can execute, along with the return types for each
     type Query {
         playerAuth(firebaseAuth: String): Player
-        findPlayer(name: Name!): Player
+        findPlayer(name: String): Player
     }
 
     type Mutation {
