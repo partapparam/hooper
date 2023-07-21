@@ -33,8 +33,8 @@ const resolvers = {
         { firebaseAuth: args.firebaseAuth },
         {
           name: {
-            first: args.firstName,
-            last: args.lastName,
+            first: args.first,
+            last: args.last,
           },
           username: args.username,
           location: args.location,

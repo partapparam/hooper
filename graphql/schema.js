@@ -6,8 +6,8 @@ const typeDefs = `#graphql
 
     type Name {
         #Cant return null if "!"
-        firstName: String
-        lastName: String
+        first: String
+        last: String
     }
 
     type Score {
@@ -68,8 +68,8 @@ const typeDefs = `#graphql
     type Mutation {
         UpdatePlayer(
             username: String!
-            firstName: String!
-            lastName: String!
+            first: String!
+            last: String!
             location: String!
             firebaseAuth: String!
         ): UpdatePlayerMutationResponse
