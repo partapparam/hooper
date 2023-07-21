@@ -36,6 +36,7 @@ const typeDefs = `#graphql
     type Query {
         PlayerAuth(firebaseAuth: String): Player
         FindPlayer(name: String): Player
+        GetAllPlayers: [Player]
     }
 
     interface MutationResponse {

@@ -7,8 +7,16 @@ const pubsub = new PubSub()
 
 const resolvers = {
   Query: {
-    PlayerAuth: (args) => User.findOne({ firebaseAuth: args.firebaseAuth }),
+    PlayerAuth: async (root, args) => {
+      console.log("here is auth", args.firebaseAuth)
+      let user = await User.findOne({ firebaseAuth: args.firebaseAuth })
+      return user
+    },
     FindPlayer: (args) => User.findOne({ username: args.username }),
+    GetAllPlayers: async () => {
+      const users = await User.find()
+      return users
+    },
   },
   Mutation: {
     CreatePlayer: async (root, args) => {

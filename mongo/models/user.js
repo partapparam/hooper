@@ -14,11 +14,6 @@ const usersSchema = new Schema(
       },
       last: { type: String },
     },
-    // passwordHash: {
-    //   type: String,
-    //   required: true,
-    //   message: "password is required",
-    // },
     profilePhoto: String,
     location: {
       type: String,
