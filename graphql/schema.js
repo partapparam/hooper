@@ -66,6 +66,13 @@ const typeDefs = `#graphql
         player: Player!
     }
 
+    type CreateGameResponse implements MutationResponse {
+        code: String!
+        success: Boolean!
+        message: String!
+        game: Game!
+    }
+
     type Mutation {
         UpdatePlayer(
             username: String!
@@ -81,7 +88,14 @@ const typeDefs = `#graphql
 
         UpdatePlayerPhoto(
             photoURL: String!
-        ): Player
+        ): UpdatePlayerPhotoResponse
+
+        CreateGame(
+            playerCount: Int!
+            homeTeam: [Player!]
+            awayTeam: [Player!]
+            firebaseAuth: String!
+        )
 
         
     }

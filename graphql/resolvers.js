@@ -14,7 +14,7 @@ const resolvers = {
     },
     FindPlayer: (args) => User.findOne({ username: args.username }),
     GetAllPlayers: async () => {
-      const users = await User.find()
+      const users = await User.find()d
       return users
     },
   },
@@ -34,11 +34,11 @@ const resolvers = {
       }
       return { code: 200, message: "success", success: true, player: user }
     },
-    UpdatePlayer: async (root, args) => {
+    UpdatePlayer: async (root, args, contextValue) => {
       console.log("updatePlayer")
       console.log(args)
       const user = await User.findOneAndUpdate(
-        { firebaseAuth: args.firebaseAuth },
+        { firebaseAuth: contextValue.auth },
         {
           name: {
             first: args.first,
