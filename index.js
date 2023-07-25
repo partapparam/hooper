@@ -79,6 +79,16 @@ const start = async () => {
       context: async ({ req }) => {
         // Set context by getting Firebase User ID. Use Firebase Admin SDK
         const auth = req ? req.query.firebase : null
+        console.log(auth)
+        if (!auth) {
+          throw new GraphQLError("user is not authenticated", {
+            extensions: {
+              code: "UNAUTHENTICATED",
+              http: { status: 401 },
+            },
+          })
+        }
+        return { auth }
 
         // const currentUser = await User.findById(auth)
         // return { currentUser }
