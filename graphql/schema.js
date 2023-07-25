@@ -42,6 +42,7 @@ const typeDefs = `#graphql
         GetGame(gameId: String): Game
         GetAllGames: [Game]
         GetAllGamesByPlayer(playerId: String): [Game]
+        GetHomeTeamPlayer(playerId: String): Player
     }
 
     interface MutationResponse {

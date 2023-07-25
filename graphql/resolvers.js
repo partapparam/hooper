@@ -17,6 +17,26 @@ const resolvers = {
       const users = await User.find()
       return users
     },
+    GetHomeTeamPlayer: (parent, args) => {
+      console.log("finding the hometeam")
+      return parent.homeTeam.map((id) => {
+        User.findOne({ firebaseAuth: id })
+      })
+    },
+  },
+  Game: {
+    homeTeam(parent, args) {
+      console.log("finding the hometeam")
+      return parent.homeTeam.map((id) => {
+        User.findOne({ firebaseAuth: id })
+      })
+    },
+    awayTeam(parent, args) {
+      console.log("finding the hometeam")
+      return parent.homeTeam.map((id) => {
+        User.findOne({ firebaseAuth: id })
+      })
+    },
   },
   Mutation: {
     CreatePlayer: async (root, args) => {
@@ -38,7 +58,7 @@ const resolvers = {
       console.log("updatePlayer")
       console.log(args)
       const user = await User.findOneAndUpdate(
-        { firebaseAuth: contextValue.auth },
+        { firebaseAuth: args.firebaseAuth },
         {
           name: {
             first: args.first,
@@ -61,17 +81,19 @@ const resolvers = {
     CreateGame: async (root, args) => {
       console.log("creating game")
       const game = await new Game({ ...args })
-      console.log(game)
-      try {
-        game.save()
-      } catch (error) {
-        throw new GraphQLError("Game was not created", {
-          extensions: {
-            code: "BAD_USER_INPUT",
-          },
-        })
-      }
+      // console.log(game)
+      console.log(args)
       return { code: 200, message: "success", success: true, game: game }
+      // try {
+      //   game.save()
+      // } catch (error) {
+      //   throw new GraphQLError("Game was not created", {
+      //     extensions: {
+      //       code: "BAD_USER_INPUT",
+      //     },
+      //   })
+      // }
+      // return { code: 200, message: "success", success: true, game: game }
     },
   },
 }
