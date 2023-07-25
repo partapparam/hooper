@@ -4,19 +4,19 @@ const { Schema, model } = mongoose
 // Game Schema
 const gamesSchema = new Schema(
   {
-    player_count: { type: Number, required: true, enum: [2, 4, 6, 8, 10] },
-    winning_team: { type: String },
+    playerCount: { type: Number, required: true, enum: [2, 4, 6, 8, 10] },
+    winningTeam: { type: String },
     score: {
       home: { type: Number },
       away: { type: Number },
     },
-    home_team: [
+    homeTeam: [
       {
         type: Schema.Types.ObjectId,
         ref: "User",
       },
     ],
-    away_team: [
+    awayTeam: [
       {
         type: Schema.Types.ObjectId,
         ref: "User",

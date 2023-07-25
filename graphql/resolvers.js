@@ -14,7 +14,7 @@ const resolvers = {
     },
     FindPlayer: (args) => User.findOne({ username: args.username }),
     GetAllPlayers: async () => {
-      const users = await User.find()d
+      const users = await User.find()
       return users
     },
   },
@@ -57,6 +57,21 @@ const resolvers = {
         success: true,
         player: user,
       }
+    },
+    CreateGame: async (root, args) => {
+      console.log("creating game")
+      const game = await new Game({ ...args })
+      console.log(game)
+      try {
+        game.save()
+      } catch (error) {
+        throw new GraphQLError("Game was not created", {
+          extensions: {
+            code: "BAD_USER_INPUT",
+          },
+        })
+      }
+      return { code: 200, message: "success", success: true, game: game }
     },
   },
 }

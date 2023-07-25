@@ -97,10 +97,10 @@ const typeDefs = `#graphql
 
         CreateGame(
             playerCount: Int!
-            homeTeam: [Player!]
-            awayTeam: [Player!]
-            firebaseAuth: String!
-        )
+            homeTeam: [String]!
+            awayTeam: [String]!
+            createdByFirebaseAuth: String!
+        ): CreateGameResponse
 
         
     }

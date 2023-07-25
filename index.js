@@ -81,12 +81,13 @@ const start = async () => {
         const auth = req ? req.query.firebase : null
         console.log(auth)
         if (!auth) {
-          throw new GraphQLError("user is not authenticated", {
-            extensions: {
-              code: "UNAUTHENTICATED",
-              http: { status: 401 },
-            },
-          })
+          // throw new GraphQLError("user is not authenticated", {
+          //   extensions: {
+          //     code: "UNAUTHENTICATED",
+          //     http: { status: 401 },
+          //   },
+          // })
+          console.log("No auth token")
         }
         return { auth }
 
