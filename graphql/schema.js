@@ -16,6 +16,7 @@ const typeDefs = `#graphql
     }
 
     type Player {
+        playerId: String
         name: Name
         phone: String
         location: String
@@ -25,6 +26,7 @@ const typeDefs = `#graphql
     }
 
     type Game {
+        gameId: String
         playerCount: Int!
         winningTeam: Int
         score: Score!
@@ -37,6 +39,9 @@ const typeDefs = `#graphql
         PlayerAuth(firebaseAuth: String): Player
         FindPlayer(name: String): Player
         GetAllPlayers: [Player]
+        GetGame(gameId: String): Game
+        GetAllGames: [Game]
+        GetAllGamesByPlayer(playerId: String): [Game]
     }
 
     interface MutationResponse {
