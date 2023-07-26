@@ -1,4 +1,4 @@
-const { GraphQLError } = require("graphql")
+const { GraphQLError, getArgumentValues } = require("graphql")
 const User = require("../mongo/models/user")
 const Game = require("../mongo/models/games")
 // Publish Subscribe for subsciptions
@@ -17,11 +17,9 @@ const resolvers = {
       const users = await User.find()
       return users
     },
-    GetHomeTeamPlayer: (parent, args) => {
-      console.log("finding the hometeam")
-      return parent.homeTeam.map((id) => {
-        User.findOne({ firebaseAuth: id })
-      })
+    GetAllGames: async () => {
+      let games = await Game.find({})
+      return games
     },
   },
   // Game: {
@@ -80,20 +78,18 @@ const resolvers = {
     },
     CreateGame: async (root, args) => {
       console.log("creating game")
-      const game = await new Game({ ...args }).populate("homeTeam", "awayTeam")
-      console.log(game)
+      const game = await new Game({ ...args })
       console.log(args)
+      try {
+        game.save()
+      } catch (error) {
+        throw new GraphQLError("Game was not created", {
+          extensions: {
+            code: "BAD_USER_INPUT",
+          },
+        })
+      }
       return { code: 200, message: "success", success: true, game: game }
-      // try {
-      //   game.save()
-      // } catch (error) {
-      //   throw new GraphQLError("Game was not created", {
-      //     extensions: {
-      //       code: "BAD_USER_INPUT",
-      //     },
-      //   })
-      // }
-      // return { code: 200, message: "success", success: true, game: game }
     },
   },
 }
