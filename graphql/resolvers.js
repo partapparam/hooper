@@ -24,20 +24,20 @@ const resolvers = {
       })
     },
   },
-  Game: {
-    homeTeam(parent, args) {
-      console.log("finding the hometeam")
-      return parent.homeTeam.map((id) => {
-        User.findOne({ firebaseAuth: id })
-      })
-    },
-    awayTeam(parent, args) {
-      console.log("finding the hometeam")
-      return parent.homeTeam.map((id) => {
-        User.findOne({ firebaseAuth: id })
-      })
-    },
-  },
+  // Game: {
+  //   homeTeam(parent, args) {
+  //     console.log("finding the hometeam")
+  //     return parent.homeTeam.map((id) => {
+  //       User.findOne({ _id: id })
+  //     })
+  //   },
+  //   awayTeam(parent, args) {
+  //     console.log("finding the awayteam")
+  //     return parent.homeTeam.map((id) => {
+  //       User.findOne({ _id: id })
+  //     })
+  //   },
+  // },
   Mutation: {
     CreatePlayer: async (root, args) => {
       console.log("creating user called", args.firebaseAuth)
@@ -80,8 +80,8 @@ const resolvers = {
     },
     CreateGame: async (root, args) => {
       console.log("creating game")
-      const game = await new Game({ ...args })
-      // console.log(game)
+      const game = await new Game({ ...args }).populate("homeTeam", "awayTeam")
+      console.log(game)
       console.log(args)
       return { code: 200, message: "success", success: true, game: game }
       // try {
