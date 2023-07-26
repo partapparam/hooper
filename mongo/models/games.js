@@ -13,13 +13,13 @@ const gamesSchema = new Schema(
     homeTeam: [
       {
         type: Schema.Types.ObjectId,
-        ref: "User",
+        ref: "Player",
       },
     ],
     awayTeam: [
       {
         type: Schema.Types.ObjectId,
-        ref: "User",
+        ref: "Player",
       },
     ],
   },

@@ -1,5 +1,5 @@
 const { GraphQLError, getArgumentValues } = require("graphql")
-const User = require("../mongo/models/user")
+const Player = require("../mongo/models/player")
 const Game = require("../mongo/models/games")
 // Publish Subscribe for subsciptions
 const { PubSub } = require("graphql-subscriptions")
@@ -9,13 +9,13 @@ const resolvers = {
   Query: {
     PlayerAuth: async (root, args) => {
       console.log("here is auth", args.firebaseAuth)
-      let user = await User.findOne({ firebaseAuth: args.firebaseAuth })
-      return user
+      let player = await Player.findOne({ firebaseAuth: args.firebaseAuth })
+      return player
     },
-    FindPlayer: (args) => User.findOne({ username: args.username }),
+    FindPlayer: (args) => Player.findOne({ username: args.username }),
     GetAllPlayers: async () => {
-      const users = await User.find()
-      return users
+      const players = await Player.find()
+      return players
     },
     GetAllGames: async () => {
       let games = await Game.find({})
@@ -27,36 +27,36 @@ const resolvers = {
       console.log("finding the hometeam")
       return parent.homeTeam.map((id) => {
         console.log(id)
-        return User.findOne({ _id: id })
+        return Player.findOne({ _id: id })
       })
     },
     awayTeam(parent, args) {
       console.log("finding the awayteam")
       return parent.homeTeam.map((id) => {
-        return User.findOne({ _id: id })
+        return Player.findOne({ _id: id })
       })
     },
   },
   Mutation: {
     CreatePlayer: async (root, args) => {
       console.log("creating user called", args.firebaseAuth)
-      const user = await new User({ firebaseAuth: args.firebaseAuth })
+      const player = await new Player({ firebaseAuth: args.firebaseAuth })
       try {
-        user.save()
+        player.save()
       } catch (error) {
-        throw new GraphQLError("User not created, firebase missing", {
+        throw new GraphQLError("player not created, firebase missing", {
           extensions: {
             code: "BAD_USER_INPUT",
             invalidArgs: args.name,
           },
         })
       }
-      return { code: 200, message: "success", success: true, player: user }
+      return { code: 200, message: "success", success: true, player: player }
     },
     UpdatePlayer: async (root, args, contextValue) => {
       console.log("updatePlayer")
       console.log(args)
-      const user = await User.findOneAndUpdate(
+      const player = await Player.findOneAndUpdate(
         { firebaseAuth: args.firebaseAuth },
         {
           name: {
@@ -68,13 +68,13 @@ const resolvers = {
         },
         { new: true }
       )
-      console.log(user)
+      console.log(player)
       // setting New option to True will return the document after update was applied
       return {
         code: 200,
         message: "see what happens",
         success: true,
-        player: user,
+        player: player,
       }
     },
     CreateGame: async (root, args) => {

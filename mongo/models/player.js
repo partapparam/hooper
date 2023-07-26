@@ -5,7 +5,7 @@ const { Schema, model } = mongoose
  * toJSON Transform function will allow us to edit the JSON object that is sent back, removing fields and changing the _id to id
  */
 
-const usersSchema = new Schema(
+const playersSchema = new Schema(
   {
     username: { type: String },
     name: {
@@ -36,21 +36,21 @@ const usersSchema = new Schema(
 /**
  * Validates unique phone number
  */
-usersSchema.path("phone").validate(async (phone) => {
-  const phoneCount = await User.countDocuments({
+playersSchema.path("phone").validate(async (phone) => {
+  const phoneCount = await Player.countDocuments({
     phone: phone,
   })
   return !phoneCount
 }, "Phone number already exists. Please log in. ")
 
 /**Username already exists */
-usersSchema.path("username").validate(async (username) => {
-  const usernameCount = await User.countDocuments({
+playersSchema.path("username").validate(async (username) => {
+  const usernameCount = await Player.countDocuments({
     username: username,
   })
   return !usernameCount
 }, "Username already exists")
 
-const User = model("User", usersSchema)
+const Player = model("Player", playersSchema)
 
-module.exports = User
+module.exports = Player
