@@ -1,4 +1,4 @@
-const { GraphQLError, getArgumentValues } = require("graphql")
+const { GraphQLError } = require("graphql")
 const Player = require("../mongo/models/player")
 const Game = require("../mongo/models/games")
 // Publish Subscribe for subsciptions
@@ -6,6 +6,21 @@ const { PubSub } = require("graphql-subscriptions")
 const pubsub = new PubSub()
 
 const resolvers = {
+  // Resolver for nested Objects
+  Game: {
+    homeTeam(parent, args) {
+      console.log("finding the hometeam")
+      return parent.homeTeam.map((id) => {
+        return Player.findOne({ _id: id })
+      })
+    },
+    awayTeam(parent, args) {
+      console.log("finding the awayteam")
+      return parent.homeTeam.map((id) => {
+        return Player.findOne({ _id: id })
+      })
+    },
+  },
   Query: {
     PlayerAuth: async (root, args) => {
       console.log("here is auth", args.firebaseAuth)
@@ -21,20 +36,10 @@ const resolvers = {
       let games = await Game.find({})
       return games
     },
-  },
-  Game: {
-    homeTeam(parent, args) {
-      console.log("finding the hometeam")
-      return parent.homeTeam.map((id) => {
-        console.log(id)
-        return Player.findOne({ _id: id })
-      })
-    },
-    awayTeam(parent, args) {
-      console.log("finding the awayteam")
-      return parent.homeTeam.map((id) => {
-        return Player.findOne({ _id: id })
-      })
+    GetGameById: async (root, args) => {
+      console.log(args)
+      let game = await Game.findOne({ _id: args.gameId })
+      return game
     },
   },
   Mutation: {
