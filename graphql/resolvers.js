@@ -22,20 +22,21 @@ const resolvers = {
       return games
     },
   },
-  // Game: {
-  //   homeTeam(parent, args) {
-  //     console.log("finding the hometeam")
-  //     return parent.homeTeam.map((id) => {
-  //       User.findOne({ _id: id })
-  //     })
-  //   },
-  //   awayTeam(parent, args) {
-  //     console.log("finding the awayteam")
-  //     return parent.homeTeam.map((id) => {
-  //       User.findOne({ _id: id })
-  //     })
-  //   },
-  // },
+  Game: {
+    homeTeam(parent, args) {
+      console.log("finding the hometeam")
+      return parent.homeTeam.map((id) => {
+        console.log(id)
+        return User.findOne({ _id: id })
+      })
+    },
+    awayTeam(parent, args) {
+      console.log("finding the awayteam")
+      return parent.homeTeam.map((id) => {
+        return User.findOne({ _id: id })
+      })
+    },
+  },
   Mutation: {
     CreatePlayer: async (root, args) => {
       console.log("creating user called", args.firebaseAuth)
@@ -78,10 +79,14 @@ const resolvers = {
     },
     CreateGame: async (root, args) => {
       console.log("creating game")
-      const game = await new Game({ ...args })
-      console.log(args)
+      const game = await new Game({
+        playerCount: args.playerCount,
+        homeTeam: args.homeTeam,
+        awayTeam: args.awayTeam,
+      })
       try {
         game.save()
+        console.log("game saved")
       } catch (error) {
         throw new GraphQLError("Game was not created", {
           extensions: {

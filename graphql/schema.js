@@ -16,7 +16,7 @@ const typeDefs = `#graphql
     }
 
     type Player {
-        id: String
+        id: ID
         name: Name
         phone: String
         location: String
@@ -26,7 +26,7 @@ const typeDefs = `#graphql
     }
 
     type Game {
-        id: String
+        id: ID
         playerCount: Int!
         winningTeam: Int
         score: Score!
