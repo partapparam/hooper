@@ -22,6 +22,10 @@ const gamesSchema = new Schema(
         ref: "Player",
       },
     ],
+    createdByPlayerId: {
+      type: Schema.Types.ObjectId,
+      ref: "Player",
+    },
   },
   {
     timestamps: true,

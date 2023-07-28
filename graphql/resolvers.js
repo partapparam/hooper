@@ -22,24 +22,32 @@ const resolvers = {
     },
   },
   Query: {
-    PlayerAuth: async (root, args) => {
-      console.log("here is auth", args.firebaseAuth)
+    GetPlayerProfileByAuth: async (root, args) => {
+      console.log("here is player by auth", args.firebaseAuth)
       let player = await Player.findOne({ firebaseAuth: args.firebaseAuth })
       return player
     },
-    FindPlayer: (args) => Player.findOne({ username: args.username }),
+    GetPlayerProfileByName: (args) =>
+      Player.findOne({ username: args.username }),
     GetAllPlayers: async () => {
+      console.log("get all players")
       const players = await Player.find()
       return players
     },
     GetAllGames: async () => {
+      console.log("get all games")
       let games = await Game.find({})
       return games
     },
     GetGameById: async (root, args) => {
-      console.log(args)
+      console.log("get game by id")
       let game = await Game.findOne({ _id: args.gameId })
       return game
+    },
+    GetAllGamesByPlayer: async (root, args) => {
+      console.log("get games by player")
+      let games = await Game.find({ createdByPlayerId: args.createdByPlayerId })
+      return games
     },
   },
   Mutation: {

@@ -1,5 +1,11 @@
 const typeDefs = `#graphql
 
+    interface MutationResponse {
+        code: String!
+        success: Boolean!
+        message: String!
+    }
+
     type Name {
         first: String
         last: String
@@ -26,23 +32,17 @@ const typeDefs = `#graphql
         winningTeam: Int
         score: Score!
         homeTeam: [Player!]! 
-        awayTeam: [Player!]! 
+        awayTeam: [Player!]!
+        createdByPlayerId: String 
     }
 
     type Query {
-        PlayerAuth(firebaseAuth: String): Player
-        FindPlayer(name: String): Player
+        GetPlayerProfileByAuth(firebaseAuth: String): Player
+        GetPlayerProfileByName(name: String): Player
         GetAllPlayers: [Player]
         GetGameById(gameId: String): Game
         GetAllGames: [Game]
         GetAllGamesByPlayer(playerId: String): [Game]
-        GetHomeTeamPlayer(playerId: String): Player
-    }
-
-    interface MutationResponse {
-        code: String!
-        success: Boolean!
-        message: String!
     }
 
     type CreatePlayerMutationResponse implements MutationResponse {
@@ -59,18 +59,31 @@ const typeDefs = `#graphql
         player: Player!
     }
 
-    type UpdatePlayerPhotoResponse implements MutationResponse {
+    type UpdatePlayerPhotoMutationResponse implements MutationResponse {
         code: String!
         success: Boolean!
         message: String!
         player: Player!
     }
 
-    type CreateGameResponse implements MutationResponse {
+    type CreateGameMutationResponse implements MutationResponse {
         code: String!
         success: Boolean!
         message: String!
         game: Game!
+    }
+
+    type UpdateGameMutationResponse implements MutationResponse {
+        code: String!
+        success: Boolean!
+        message: String!
+        game: Game!
+    }
+
+    type DeleteGameMutationResponse implements MutationResponse {
+        code: String!
+        success: Boolean!
+        message: String!
     }
 
     type Mutation {
@@ -88,17 +101,29 @@ const typeDefs = `#graphql
 
         UpdatePlayerPhoto(
             photoURL: String!
-        ): UpdatePlayerPhotoResponse
+            playerId: String!
+        ): UpdatePlayerPhotoMutationResponse
 
         CreateGame(
             playerCount: Int!
             homeTeam: [String]!
             awayTeam: [String]!
-            createdByFirebaseAuth: String!
-        ): CreateGameResponse
+            createdByPlayerId: String!
+        ): CreateGameMutationResponse
 
-        
+        UpdateGame(
+            home: Int
+            away: Int
+            winningTeam: String
+        ): UpdateGameMutationResponse
+
+        DeleteGame(
+            gameId: String!
+            playerId: String!
+        ): DeleteGameMutationResponse
+
     }
+
 
     type Subscription {
         GameAdded: Game!
