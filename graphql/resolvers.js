@@ -68,7 +68,6 @@ const resolvers = {
     },
     UpdatePlayer: async (root, args, contextValue) => {
       console.log("updatePlayer")
-      console.log(args)
       const player = await Player.findOneAndUpdate(
         { firebaseAuth: args.firebaseAuth },
         {
@@ -85,6 +84,22 @@ const resolvers = {
       return {
         code: 200,
         message: "see what happens",
+        success: true,
+        player: player,
+      }
+    },
+    UpdatePlayerPhoto: async (root, args) => {
+      console.log("update Player photo")
+      const player = await Player.findOneAndUpdate(
+        { _id: args.playerId },
+        {
+          profilePhoto: args.profilePhoto,
+        },
+        { new: true }
+      )
+      return {
+        code: 200,
+        message: "Profile Photo has been updated",
         success: true,
         player: player,
       }
@@ -107,6 +122,50 @@ const resolvers = {
         })
       }
       return { code: 200, message: "success", success: true, game: game }
+    },
+    UpdateGame: async (args) => {
+      console.log("update game")
+      try {
+        const game = await Game.findOneAndUpdate(
+          { _id: args.gameId },
+          {
+            score: {
+              home: args.home,
+              away: args.away,
+            },
+            winningTeam: args.winningTeam,
+          }
+        )
+
+        return {
+          code: 200,
+          message: "The game has been updated",
+          success: true,
+          player: game,
+        }
+      } catch (err) {
+        console.log("error updating game")
+        return {
+          code: 400,
+          message: "Game cannot be updated, try again.",
+          success: false,
+        }
+      }
+    },
+    DeleteGame: async (args) => {
+      // Only the creator of the game should be able to delete.
+      console.log("delete game")
+      try {
+        let deletedGame = await Game.deleteOne({ _id: args.gameId })
+        return deletedGame
+      } catch (err) {
+        console.log("error deleting game")
+        return {
+          code: 400,
+          message: "Game cannot be deleted.",
+          success: false,
+        }
+      }
     },
   },
   Subscription: {
