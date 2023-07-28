@@ -1,7 +1,4 @@
 const typeDefs = `#graphql
-# A Schema is not responsible for defining where the data comes from or hows it stored. It defines a collection of types and the relationships between those types
-
-
 
     type Name {
         first: String
@@ -28,8 +25,8 @@ const typeDefs = `#graphql
         playerCount: Int!
         winningTeam: Int
         score: Score!
-        homeTeam: [Player!]! # this list can't be null and the list items can't be null
-        awayTeam: [Player!] #the list items can't be null
+        homeTeam: [Player!]! 
+        awayTeam: [Player!]! 
     }
 
     type Query {
@@ -101,6 +98,10 @@ const typeDefs = `#graphql
         ): CreateGameResponse
 
         
+    }
+
+    type Subscription {
+        GameAdded: Game!
     }
 `
 

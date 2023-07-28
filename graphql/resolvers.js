@@ -73,7 +73,6 @@ const resolvers = {
         },
         { new: true }
       )
-      console.log(player)
       // setting New option to True will return the document after update was applied
       return {
         code: 200,
@@ -100,6 +99,11 @@ const resolvers = {
         })
       }
       return { code: 200, message: "success", success: true, game: game }
+    },
+  },
+  Subscription: {
+    GameAdded: {
+      subscribe: () => pubsub.asyncIterator("GAME_ADDED"),
     },
   },
 }
