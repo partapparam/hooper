@@ -21,7 +21,7 @@ const typeDefs = `#graphql
         name: Name
         phone: String
         location: String
-        photoURL: String
+        profilePhoto: String
         username: String
         firebaseAuth: String!
     }
@@ -100,7 +100,7 @@ const typeDefs = `#graphql
         ): CreatePlayerMutationResponse
 
         UpdatePlayerPhoto(
-            photoURL: String!
+            profilePhoto: String!
             playerId: String!
         ): UpdatePlayerPhotoMutationResponse
 
