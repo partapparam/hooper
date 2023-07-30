@@ -24,6 +24,8 @@ const typeDefs = `#graphql
         profilePhoto: String
         username: String
         firebaseAuth: String!
+        updatedAt: String
+        createdAt: String
     }
 
     type Game {
@@ -34,6 +36,8 @@ const typeDefs = `#graphql
         homeTeam: [Player!]! 
         awayTeam: [Player!]!
         createdByPlayerId: String 
+        updatedAt: String
+        createdAt: String
     }
 
     type Query {
