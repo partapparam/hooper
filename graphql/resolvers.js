@@ -32,6 +32,7 @@ const resolvers = {
     SearchPlayers: async (root, args) => {
       console.log("search", args)
       const players = await Player.playerSearch(args.searchTerm)
+      console.log(players)
       return players
     },
     GetAllPlayers: async () => {

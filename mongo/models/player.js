@@ -57,7 +57,7 @@ playersSchema.statics.playerSearch = function (searchTerm) {
   const query = {
     $or: [
       ...stringSearchFields.map((field) => ({
-        [field]: new RegExp(`^[${searchTerm}]`, "i"),
+        [field]: new RegExp(`^${searchTerm}`, "gi"),
       })),
       // ...numberSearchFields.map((field) => ({
       //   $where: `/^${searchTerm}.*/.test(this.${field})`,
