@@ -29,6 +29,11 @@ const resolvers = {
     },
     GetPlayerProfileByName: (args) =>
       Player.findOne({ username: args.username }),
+    SearchPlayers: async (root, args) => {
+      console.log("search", args)
+      const players = await Player.playerSearch(args.searchTerm)
+      return players
+    },
     GetAllPlayers: async () => {
       console.log("get all players")
       const players = await Player.find()

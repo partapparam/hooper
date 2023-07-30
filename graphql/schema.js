@@ -43,6 +43,7 @@ const typeDefs = `#graphql
         GetGameById(gameId: String): Game
         GetAllGames: [Game]
         GetAllGamesByPlayer(playerId: String): [Game]
+        SearchPlayers(searchTerm: String): [Player]
     }
 
     type CreatePlayerMutationResponse implements MutationResponse {

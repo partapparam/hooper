@@ -51,6 +51,22 @@ playersSchema.path("username").validate(async (username) => {
   return !usernameCount
 }, "Username already exists")
 
+playersSchema.statics.playerSearch = function (searchTerm) {
+  const stringSearchFields = ["name.first", "name.last", "username"]
+  // const numberSearchFields = ["phone"]
+  const query = {
+    $or: [
+      ...stringSearchFields.map((field) => ({
+        [field]: new RegExp(`^[${searchTerm}]`, "i"),
+      })),
+      // ...numberSearchFields.map((field) => ({
+      //   $where: `/^${searchTerm}.*/.test(this.${field})`,
+      // })),
+    ],
+  }
+  return this.find(query)
+}
+
 const Player = model("Player", playersSchema)
 
 module.exports = Player
