@@ -5,6 +5,11 @@ const Game = require("../mongo/models/games")
 const { PubSub } = require("graphql-subscriptions")
 const pubsub = new PubSub()
 
+// Check to see if player already exists. Return player instead of creating a new one
+const validate = async (firebaseUID) => {
+  return await Player.findOne({ firebaseUID })
+}
+
 const resolvers = {
   // Resolver for nested Objects
   Game: {
@@ -59,22 +64,35 @@ const resolvers = {
   Mutation: {
     CreatePlayer: async (root, args) => {
       console.log("creating user called")
-      const player = await new Player({
-        firebaseUID: args.firebaseUID,
-        phone: args.phone,
-      })
+
       try {
-        player.save()
+        const existingUser = await validate(args.firebaseUID)
+        if (existingUser) {
+          return {
+            code: 200,
+            message: "Player already exists, welcome back",
+            success: true,
+            player: existingUser,
+          }
+        }
+        const player = await new Player({
+          firebaseUID: args.firebaseUID,
+          phone: args.phone,
+        }).save()
+        return {
+          code: 200,
+          message: "Player created. Welcome to Hooper",
+          success: true,
+          player: player,
+        }
       } catch (error) {
-        console.log(error)
-        throw new GraphQLError("player not created, firebase missing", {
+        throw new GraphQLError("Player not created, user already exists", {
           extensions: {
             code: "BAD_USER_INPUT",
             invalidArgs: args.firebaseUID,
           },
         })
       }
-      return { code: 200, message: "success", success: true, player: player }
     },
     UpdatePlayer: async (root, args, contextValue) => {
       console.log("updatePlayer")
