@@ -16,6 +16,8 @@ const { WebSocketServer } = require("ws")
 const { useServer } = require("graphql-ws/lib/use/ws")
 const typeDefs = require("./graphql/schema")
 const resolvers = require("./graphql/resolvers")
+const VerifyToken = require("./middleware/verifyToken")
+const auth = require("./firebase/firebase.js")
 
 require("dotenv").config()
 // require("./postgres/pg")
@@ -27,6 +29,7 @@ app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(morgan("dev"))
+// app.use(VerifyToken)
 
 const server = new ApolloServer({
   typeDefs,
@@ -78,15 +81,18 @@ const start = async () => {
     expressMiddleware(server, {
       context: async ({ req }) => {
         // Set context by getting Firebase User ID. Use Firebase Admin SDK
-        const auth = req ? req.headers.authorization : null
-        if (auth && auth.startsWith("Bearer ")) {
-          const token = auth.substring(7)
-          console.log("Found the token")
+        const header = req ? req.headers.authorization : null
+        let currentUser = null
+        if (header && header.startsWith("Bearer ")) {
+          const token = header.split(" ")[1]
+          const decodeValue = await auth.verifyIdToken(token)
+          if (decodeValue) {
+            console.log("Decode value")
+            currentUser = decodeValue.uid
+          }
         }
-        return { auth }
-
-        // const currentUser = await User.findById(auth)
-        // return { currentUser }
+        // CurrentUser will be available in the context for every resolver
+        return { currentUser }
       },
     })
   )

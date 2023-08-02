@@ -64,8 +64,8 @@ const resolvers = {
   Mutation: {
     CreatePlayer: async (root, args) => {
       console.log("creating user called")
-
       try {
+        // Check to see if a user already exists with this ID. Return that user instead of creating a new one.
         const existingUser = await validate(args.firebaseUID)
         if (existingUser) {
           return {
@@ -81,21 +81,25 @@ const resolvers = {
         }).save()
         return {
           code: 200,
-          message: "Player created. Welcome to Hooper",
+          message: "Your account has been created. Welcome to Hooper",
           success: true,
           player: player,
         }
       } catch (error) {
-        throw new GraphQLError("Player not created, user already exists", {
-          extensions: {
-            code: "BAD_USER_INPUT",
-            invalidArgs: args.firebaseUID,
-          },
-        })
+        throw new GraphQLError(
+          "Player not created, an account already exists at with this phone number. Please try again",
+          {
+            extensions: {
+              code: "BAD_USER_INPUT",
+              invalidArgs: args.firebaseUID,
+            },
+          }
+        )
       }
     },
     UpdatePlayer: async (root, args, contextValue) => {
       console.log("updatePlayer")
+      console.log(contextValue.currentUser)
       const player = await Player.findOneAndUpdate(
         { firebaseUID: args.firebaseUID },
         {
