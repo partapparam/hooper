@@ -87,7 +87,6 @@ const start = async () => {
           const token = header.split(" ")[1]
           const decodeValue = await auth.verifyIdToken(token)
           if (decodeValue) {
-            console.log("Decode value")
             currentUser = decodeValue.uid
           }
         }
