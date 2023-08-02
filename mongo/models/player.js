@@ -19,7 +19,7 @@ const playersSchema = new Schema(
       type: String,
     },
     phone: String,
-    firebaseAuth: String,
+    firebaseUID: String,
   },
   {
     timestamps: true,

@@ -23,8 +23,8 @@ const resolvers = {
   },
   Query: {
     GetPlayerProfileByAuth: async (root, args) => {
-      console.log("here is player by auth", args.firebaseAuth)
-      let player = await Player.findOne({ firebaseAuth: args.firebaseAuth })
+      console.log("here is player by auth", args.firebaseUID)
+      let player = await Player.findOne({ firebaseUID: args.firebaseUID })
       return player
     },
     GetPlayerProfileByName: (args) =>
@@ -58,15 +58,19 @@ const resolvers = {
   },
   Mutation: {
     CreatePlayer: async (root, args) => {
-      console.log("creating user called", args.firebaseAuth)
-      const player = await new Player({ firebaseAuth: args.firebaseAuth })
+      console.log("creating user called")
+      const player = await new Player({
+        firebaseUID: args.firebaseUID,
+        phone: args.phone,
+      })
       try {
         player.save()
       } catch (error) {
+        console.log(error)
         throw new GraphQLError("player not created, firebase missing", {
           extensions: {
             code: "BAD_USER_INPUT",
-            invalidArgs: args.name,
+            invalidArgs: args.firebaseUID,
           },
         })
       }
@@ -75,7 +79,7 @@ const resolvers = {
     UpdatePlayer: async (root, args, contextValue) => {
       console.log("updatePlayer")
       const player = await Player.findOneAndUpdate(
-        { firebaseAuth: args.firebaseAuth },
+        { firebaseUID: args.firebaseUID },
         {
           name: {
             first: args.first,

@@ -23,7 +23,7 @@ const typeDefs = `#graphql
         location: String
         profilePhoto: String
         username: String
-        firebaseAuth: String!
+        firebaseUID: String!
         updatedAt: String
         createdAt: String
     }
@@ -41,7 +41,7 @@ const typeDefs = `#graphql
     }
 
     type Query {
-        GetPlayerProfileByAuth(firebaseAuth: String): Player
+        GetPlayerProfileByAuth(firebaseUID: String): Player
         GetPlayerProfileByName(name: String): Player
         GetAllPlayers: [Player]
         GetGameById(gameId: String): Game
@@ -97,11 +97,12 @@ const typeDefs = `#graphql
             first: String!
             last: String!
             location: String!
-            firebaseAuth: String!
+            firebaseUID: String!
         ): UpdatePlayerMutationResponse
 
         CreatePlayer(
-            firebaseAuth: String!
+            firebaseUID: String!
+            phone: String!
         ): CreatePlayerMutationResponse
 
         UpdatePlayerPhoto(

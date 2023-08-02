@@ -78,16 +78,10 @@ const start = async () => {
     expressMiddleware(server, {
       context: async ({ req }) => {
         // Set context by getting Firebase User ID. Use Firebase Admin SDK
-        const auth = req ? req.query.firebase : null
-        console.log(auth)
-        if (!auth) {
-          // throw new GraphQLError("user is not authenticated", {
-          //   extensions: {
-          //     code: "UNAUTHENTICATED",
-          //     http: { status: 401 },
-          //   },
-          // })
-          console.log("No auth token")
+        const auth = req ? req.headers.authorization : null
+        if (auth && auth.startsWith("Bearer ")) {
+          const token = auth.substring(7)
+          console.log("Found the token")
         }
         return { auth }
 
