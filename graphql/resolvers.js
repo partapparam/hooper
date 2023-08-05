@@ -21,7 +21,7 @@ const resolvers = {
     },
     awayTeam(parent, args) {
       console.log("finding the awayteam")
-      return parent.homeTeam.map((id) => {
+      return parent.awayTeam.map((id) => {
         return Player.findOne({ _id: id })
       })
     },
@@ -138,16 +138,12 @@ const resolvers = {
     },
     CreateGame: async (root, args, context) => {
       console.log("creating game", args)
-      console.log(context)
-      const user = await Player.findOne({ firebaseUID: context.currentUser })
-      if (user == null) throw new Error("no user")
-      console.log(user)
 
       const game = await new Game({
         playerCount: args.playerCount,
-        homeTeam: [user.id],
+        homeTeam: [args.homeTeam],
         awayTeam: [args.awayTeam],
-        createdByPlayerId: user.id,
+        createdByPlayerId: args.createdByPlayerId,
       })
       try {
         game.save()
