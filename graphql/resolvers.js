@@ -136,12 +136,18 @@ const resolvers = {
         player: player,
       }
     },
-    CreateGame: async (root, args) => {
-      console.log("creating game")
+    CreateGame: async (root, args, context) => {
+      console.log("creating game", args)
+      console.log(context)
+      const user = await Player.findOne({ firebaseUID: context.currentUser })
+      if (user == null) throw new Error("no user")
+      console.log(user)
+
       const game = await new Game({
         playerCount: args.playerCount,
-        homeTeam: args.homeTeam,
-        awayTeam: args.awayTeam,
+        homeTeam: [user.id],
+        awayTeam: [args.awayTeam],
+        createdByPlayerId: user.id,
       })
       try {
         game.save()
