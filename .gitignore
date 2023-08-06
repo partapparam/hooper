@@ -27,4 +27,4 @@ yarn-error.log*
 *.pub
 
 #ignore .json files
-firebase/serviceAccountKey.json
+# firebase/serviceAccountKey.json
