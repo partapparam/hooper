@@ -31,7 +31,7 @@ const typeDefs = `#graphql
     type Game {
         id: ID
         playerCount: Int!
-        winningTeam: Int
+        winningTeam: String
         score: Score!
         homeTeam: [Player!]! 
         awayTeam: [Player!]!
@@ -115,6 +115,9 @@ const typeDefs = `#graphql
             homeTeam: [String]!
             awayTeam: [String]!
             createdByPlayerId: String!
+            home: Int
+            away: Int
+            winningTeam: String
         ): CreateGameMutationResponse
 
         UpdateGame(

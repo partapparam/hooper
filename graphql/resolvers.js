@@ -144,6 +144,11 @@ const resolvers = {
         homeTeam: [args.homeTeam],
         awayTeam: [args.awayTeam],
         createdByPlayerId: args.createdByPlayerId,
+        score: {
+          away: args.away,
+          home: args.home,
+        },
+        winningTeam: args.winningTeam,
       })
       try {
         game.save()
