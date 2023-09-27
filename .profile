@@ -1,0 +1,1 @@
+exho ${GOOGLE_CREDENTIALS} > /firebase/googleCredentials.json
